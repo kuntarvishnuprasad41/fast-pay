@@ -116,133 +116,155 @@ export const navItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: 'dashboard',
-    label: 'Dashboard'
+    label: 'Dashboard',
+    disabled: false
   },
   {
     title: 'Merchant Details',
     href: '/dashboard/merchant-details',
     icon: 'dashboard',
-    label: 'Merchant Details'
+    label: 'Merchant Details',
+    disabled: false
   },
   {
     title: 'Transaction',
     href: '/dashboard/transaction',
     icon: 'dashboard',
-    label: 'Transaction'
+    label: 'Transaction',
+    disabled: true
   },
   {
     title: 'SS Transactions',
     href: '/dashboard/ss-transactions',
     icon: 'dashboard',
-    label: 'SS Transactions'
+    label: 'SS Transactions',
+    disabled: true
   },
   {
     title: 'Payout',
     href: '/dashboard/payout',
     icon: 'dashboard',
-    label: 'Payout'
+    label: 'Payout',
+    disabled: true
   },
   {
     title: 'Payout W Client',
     href: '/dashboard/payout-w-client',
     icon: 'dashboard',
-    label: 'Payout W Client'
+    label: 'Payout W Client',
+    disabled: true
   },
   {
     title: 'Bank Transaction',
     href: '/dashboard/bank-transaction',
     icon: 'dashboard',
-    label: 'Bank Transaction'
+    label: 'Bank Transaction',
+    disabled: false
   },
   {
     title: 'Bank Login',
     href: '/dashboard/bank-login',
     icon: 'dashboard',
-    label: 'Bank Login'
+    label: 'Bank Login',
+    disabled: true
   },
   {
     title: 'Reconciliation',
     href: '/dashboard/reconciliation',
     icon: 'dashboard',
-    label: 'Reconciliation'
+    label: 'Reconciliation',
+    disabled: true
   },
   {
     title: 'Debit Bank',
     href: '/dashboard/debit-bank',
     icon: 'dashboard',
-    label: 'Debit Bank'
+    label: 'Debit Bank',
+    disabled: true
   },
   {
     title: 'Settlement',
     href: '/dashboard/settlement',
     icon: 'dashboard',
-    label: 'Settlement'
+    label: 'Settlement',
+    disabled: true
   },
   {
     title: 'Payout Credit',
     href: '/dashboard/payout-credit',
     icon: 'dashboard',
-    label: 'Payout Credit'
+    label: 'Payout Credit',
+    disabled: true
   },
   {
     title: 'Report',
     href: '/dashboard/report',
     icon: 'dashboard',
-    label: 'Report'
+    label: 'Report',
+    disabled: true
   },
   {
     title: 'Support Logs',
     href: '/dashboard/support-logs',
     icon: 'dashboard',
-    label: 'Support Logs'
+    label: 'Support Logs',
+    disabled: true
   },
   {
     title: 'Payin Summery',
     href: '/dashboard/payin-summary',
     icon: 'dashboard',
-    label: 'Payin Summery'
+    label: 'Payin Summery',
+    disabled: true
   },
   {
     title: 'Webhook Event',
     href: '/dashboard/webhook-event',
     icon: 'dashboard',
-    label: 'Webhook Event'
+    label: 'Webhook Event',
+    disabled: true
   },
   {
     title: 'Almaron',
     href: '/dashboard/almaron',
     icon: 'dashboard',
-    label: 'Almaron'
+    label: 'Almaron',
+    disabled: true
   },
   {
     title: 'Bank Statement',
     href: '/dashboard/bank-statement',
     icon: 'dashboard',
-    label: 'Bank Statement'
+    label: 'Bank Statement',
+    disabled: true
   },
   {
     title: 'ItextCom',
     href: '/dashboard/itextcom',
     icon: 'dashboard',
-    label: 'ItextCom'
+    label: 'ItextCom',
+    disabled: true
   },
   {
     title: 'Iflexcapital',
     href: '/dashboard/iflexcapital',
     icon: 'dashboard',
-    label: 'Iflexcapital'
+    label: 'Iflexcapital',
+    disabled: true
   },
   {
     title: 'bazey_payees',
     href: '/dashboard/bazey-payees',
     icon: 'dashboard',
-    label: 'bazey_payees'
+    label: 'bazey_payees',
+    disabled: true
   },
   {
     title: '201-CSLOTV',
     href: '/dashboard/201-cslotv',
     icon: 'dashboard',
-    label: '201-CSLOTV'
+    label: '201-CSLOTV',
+    disabled: true
   },
   {
     title: 'User',
