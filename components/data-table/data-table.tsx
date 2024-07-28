@@ -83,7 +83,7 @@ export const columns: ColumnDef<Payment>[] = [
 
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD'
+        currency: 'INR'
       }).format(amount);
 
       return <div className="text-right font-medium">{formatted}</div>;
@@ -98,7 +98,7 @@ export const columns: ColumnDef<Payment>[] = [
 
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD'
+        currency: 'INR'
       }).format(amount);
 
       return <div className="text-right font-medium">{formatted}</div>;
