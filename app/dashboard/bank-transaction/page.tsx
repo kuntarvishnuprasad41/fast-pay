@@ -4,8 +4,19 @@ import { nanoid } from 'nanoid';
 import { BankListTable } from '@/components/data-table/data-table';
 import { AddBankDialog } from '@/components/data-table/AddEditModal';
 
+type BankDetails = {
+  id: string;
+  accountHolderName: string;
+  accountNumber: string;
+  ifscCode: string;
+  bankName: string;
+  creditLimit: number;
+  debitLimit: number;
+  upiId: string;
+  level: string;
+};
 const Page = () => {
-  const [bankList, setBankList] = useState([
+  const bd: BankDetails[] = [
     {
       id: nanoid(16),
       accountHolderName: 'Vishnu',
@@ -29,9 +40,11 @@ const Page = () => {
       level: 'Level2'
     }
     // Add more data as needed
-  ]);
+  ];
 
-  const handleAddBank = (formData) => {
+  const [bankList, setBankList] = useState<BankDetails[]>(bd);
+
+  const handleAddBank = (formData: BankDetails) => {
     setBankList([...bankList, formData]);
   };
 
