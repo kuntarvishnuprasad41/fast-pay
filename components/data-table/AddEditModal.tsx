@@ -29,16 +29,18 @@ export function AddBankDialog({ handleAddBank }: any) {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [id]: value
-    }));
+    if (id) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [id]: value
+      }));
+    }
   };
 
   const handleSave = () => {
     // Save the formData as JSON
     // console.log(JSON.stringify(formData));
-    handleAddBank();
+    handleAddBank(formData); // Pass formData to handleAddBank
   };
 
   return (
@@ -54,94 +56,28 @@ export function AddBankDialog({ handleAddBank }: any) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="accountHolderName" className="text-right">
-              Account Holder Name
-            </Label>
-            <Input
-              id="accountHolderName"
-              value={formData.accountHolderName}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="accountNumber" className="text-right">
-              Account Number
-            </Label>
-            <Input
-              id="accountNumber"
-              value={formData.accountNumber}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="ifscCode" className="text-right">
-              IFSC Code
-            </Label>
-            <Input
-              id="ifscCode"
-              value={formData.ifscCode}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="bankName" className="text-right">
-              Bank Name
-            </Label>
-            <Input
-              id="bankName"
-              value={formData.bankName}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="creditLimit" className="text-right">
-              Credit Limit
-            </Label>
-            <Input
-              id="creditLimit"
-              value={formData.creditLimit}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="debitLimit" className="text-right">
-              Debit Limit
-            </Label>
-            <Input
-              id="debitLimit"
-              value={formData.debitLimit}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="upiId" className="text-right">
-              UPI Id
-            </Label>
-            <Input
-              id="upiId"
-              value={formData.upiId}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="level" className="text-right">
-              Level
-            </Label>
-            <Input
-              id="level"
-              value={formData.level}
-              onChange={handleChange}
-              className="col-span-3"
-            />
-          </div>
+          {[
+            'accountHolderName',
+            'accountNumber',
+            'ifscCode',
+            'bankName',
+            'creditLimit',
+            'debitLimit',
+            'upiId',
+            'level'
+          ].map((field) => (
+            <div key={field} className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor={field} className="text-right">
+                {field.replace(/([A-Z])/g, ' $1').trim()}
+              </Label>
+              <Input
+                id={field}
+                value={formData[field]}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+          ))}
         </div>
         <DialogFooter>
           <DialogClose asChild>
