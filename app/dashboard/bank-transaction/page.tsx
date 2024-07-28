@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import { BankListTable } from '@/components/data-table/data-table';
 import { AddBankDialog } from '@/components/data-table/AddEditModal';
 
-type BankDetails = {
+export type BankDetails = {
   id: string;
   accountHolderName: string;
   accountNumber: string;

@@ -38,7 +38,7 @@ export function AddBankDialog({ handleAddBank }) {
   const handleSave = () => {
     // Save the formData as JSON
     // console.log(JSON.stringify(formData));
-    handleAddBank(formData);
+    handleAddBank();
   };
 
   return (
