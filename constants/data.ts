@@ -8,6 +8,7 @@ export type User = {
   verified: boolean;
   status: string;
 };
+
 export const users: User[] = [
   {
     id: 1,
@@ -116,6 +117,132 @@ export const navItems: NavItem[] = [
     href: '/dashboard',
     icon: 'dashboard',
     label: 'Dashboard'
+  },
+  {
+    title: 'Merchant Details',
+    href: '/dashboard/merchant-details',
+    icon: 'dashboard',
+    label: 'Merchant Details'
+  },
+  {
+    title: 'Transaction',
+    href: '/dashboard/transaction',
+    icon: 'dashboard',
+    label: 'Transaction'
+  },
+  {
+    title: 'SS Transactions',
+    href: '/dashboard/ss-transactions',
+    icon: 'dashboard',
+    label: 'SS Transactions'
+  },
+  {
+    title: 'Payout',
+    href: '/dashboard/payout',
+    icon: 'dashboard',
+    label: 'Payout'
+  },
+  {
+    title: 'Payout W Client',
+    href: '/dashboard/payout-w-client',
+    icon: 'dashboard',
+    label: 'Payout W Client'
+  },
+  {
+    title: 'Bank Transaction',
+    href: '/dashboard/bank-transaction',
+    icon: 'dashboard',
+    label: 'Bank Transaction'
+  },
+  {
+    title: 'Bank Login',
+    href: '/dashboard/bank-login',
+    icon: 'dashboard',
+    label: 'Bank Login'
+  },
+  {
+    title: 'Reconciliation',
+    href: '/dashboard/reconciliation',
+    icon: 'dashboard',
+    label: 'Reconciliation'
+  },
+  {
+    title: 'Debit Bank',
+    href: '/dashboard/debit-bank',
+    icon: 'dashboard',
+    label: 'Debit Bank'
+  },
+  {
+    title: 'Settlement',
+    href: '/dashboard/settlement',
+    icon: 'dashboard',
+    label: 'Settlement'
+  },
+  {
+    title: 'Payout Credit',
+    href: '/dashboard/payout-credit',
+    icon: 'dashboard',
+    label: 'Payout Credit'
+  },
+  {
+    title: 'Report',
+    href: '/dashboard/report',
+    icon: 'dashboard',
+    label: 'Report'
+  },
+  {
+    title: 'Support Logs',
+    href: '/dashboard/support-logs',
+    icon: 'dashboard',
+    label: 'Support Logs'
+  },
+  {
+    title: 'Payin Summery',
+    href: '/dashboard/payin-summary',
+    icon: 'dashboard',
+    label: 'Payin Summery'
+  },
+  {
+    title: 'Webhook Event',
+    href: '/dashboard/webhook-event',
+    icon: 'dashboard',
+    label: 'Webhook Event'
+  },
+  {
+    title: 'Almaron',
+    href: '/dashboard/almaron',
+    icon: 'dashboard',
+    label: 'Almaron'
+  },
+  {
+    title: 'Bank Statement',
+    href: '/dashboard/bank-statement',
+    icon: 'dashboard',
+    label: 'Bank Statement'
+  },
+  {
+    title: 'ItextCom',
+    href: '/dashboard/itextcom',
+    icon: 'dashboard',
+    label: 'ItextCom'
+  },
+  {
+    title: 'Iflexcapital',
+    href: '/dashboard/iflexcapital',
+    icon: 'dashboard',
+    label: 'Iflexcapital'
+  },
+  {
+    title: 'bazey_payees',
+    href: '/dashboard/bazey-payees',
+    icon: 'dashboard',
+    label: 'bazey_payees'
+  },
+  {
+    title: '201-CSLOTV',
+    href: '/dashboard/201-cslotv',
+    icon: 'dashboard',
+    label: '201-CSLOTV'
   },
   {
     title: 'User',

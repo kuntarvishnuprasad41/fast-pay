@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import GoogleSignInButton from '../github-auth-button';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' })
@@ -24,6 +25,7 @@ const formSchema = z.object({
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, setLoading] = useState(false);
@@ -36,10 +38,11 @@ export default function UserAuthForm() {
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    signIn('credentials', {
-      email: data.email,
-      callbackUrl: callbackUrl ?? '/dashboard'
-    });
+    // signIn('credentials', {
+    //   email: data.email,
+    //   callbackUrl: callbackUrl ?? '/dashboard'
+    // });
+    router.push('/dashboard');
   };
 
   return (
@@ -78,12 +81,12 @@ export default function UserAuthForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
+          {/* <span className="bg-background px-2 text-muted-foreground">
             Or continue with
-          </span>
+          </span> */}
         </div>
       </div>
-      <GoogleSignInButton />
+      {/* <GoogleSignInButton /> */}
     </>
   );
 }

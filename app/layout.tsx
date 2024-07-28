@@ -10,7 +10,7 @@ import { auth } from '@/auth';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn',
+  title: 'FastPay Payment Gateway',
   description: 'Basic dashboard with Next.js and Shadcn'
 };
 
