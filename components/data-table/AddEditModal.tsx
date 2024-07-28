@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { nanoid } from 'nanoid';
 
-export function AddBankDialog({ handleAddBank }) {
+export function AddBankDialog({ handleAddBank }: any) {
   const [formData, setFormData] = useState({
     id: nanoid(16),
     accountHolderName: '',
