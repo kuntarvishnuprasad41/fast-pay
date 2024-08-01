@@ -25,7 +25,9 @@ const Page = () => {
   useEffect(() => {
     const fetchBankList = async () => {
       try {
-        const response = await axios.get('http://localhost:8009');
+        const response = await axios.get(
+          'https://api.vishnuprasadkuntar.me/payments'
+        );
         setBankList(response.data);
       } catch (err) {
         setError('Failed to fetch bank details.');
@@ -39,7 +41,10 @@ const Page = () => {
 
   const handleAddBank = async (formData: BankDetails) => {
     try {
-      const response = await axios.post('http://localhost:8009/', formData);
+      const response = await axios.post(
+        'https://api.vishnuprasadkuntar.me/payments',
+        formData
+      );
       setBankList([...bankList, response.data]);
     } catch (err) {
       setError('Failed to add bank details.');
