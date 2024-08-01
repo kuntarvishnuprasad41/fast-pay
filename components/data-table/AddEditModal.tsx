@@ -16,7 +16,6 @@ import { nanoid } from 'nanoid';
 
 export function AddBankDialog({ handleAddBank }: any) {
   const [formData, setFormData] = useState({
-    id: nanoid(16),
     accountHolderName: '',
     accountNumber: '',
     ifscCode: '',
@@ -38,9 +37,30 @@ export function AddBankDialog({ handleAddBank }: any) {
   };
 
   const handleSave = () => {
-    // Save the formData as JSON
-    // console.log(JSON.stringify(formData));
-    handleAddBank(formData); // Pass formData to handleAddBank
+    // Map form data to API data keys
+    const apiData = {
+      accountNumber: formData.accountNumber,
+      amount: parseFloat(formData.creditLimit), // Assuming amount corresponds to creditLimit
+      bankName: formData.bankName,
+      ifscCode: formData.ifscCode,
+      upiId: formData.upiId,
+      userName: formData.accountHolderName
+    };
+
+    // Pass the mapped data to handleAddBank
+    handleAddBank(apiData);
+
+    // Clear the form
+    setFormData({
+      accountHolderName: '',
+      accountNumber: '',
+      ifscCode: '',
+      bankName: '',
+      creditLimit: '',
+      debitLimit: '',
+      upiId: '',
+      level: ''
+    });
   };
 
   return (

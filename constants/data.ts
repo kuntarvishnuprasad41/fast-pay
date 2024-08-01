@@ -155,10 +155,10 @@ export const navItems: NavItem[] = [
     disabled: true
   },
   {
-    title: 'Bank Transaction',
+    title: 'Manual Bank',
     href: '/dashboard/bank-transaction',
     icon: 'dashboard',
-    label: 'Bank Transaction',
+    label: 'Manual Bank',
     disabled: false
   },
   {
@@ -236,34 +236,6 @@ export const navItems: NavItem[] = [
     href: '/dashboard/bank-statement',
     icon: 'dashboard',
     label: 'Bank Statement',
-    disabled: true
-  },
-  {
-    title: 'ItextCom',
-    href: '/dashboard/itextcom',
-    icon: 'dashboard',
-    label: 'ItextCom',
-    disabled: true
-  },
-  {
-    title: 'Iflexcapital',
-    href: '/dashboard/iflexcapital',
-    icon: 'dashboard',
-    label: 'Iflexcapital',
-    disabled: true
-  },
-  {
-    title: 'bazey_payees',
-    href: '/dashboard/bazey-payees',
-    icon: 'dashboard',
-    label: 'bazey_payees',
-    disabled: true
-  },
-  {
-    title: '201-CSLOTV',
-    href: '/dashboard/201-cslotv',
-    icon: 'dashboard',
-    label: '201-CSLOTV',
     disabled: true
   },
   {

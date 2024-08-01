@@ -33,10 +33,8 @@ export function DashboardNav({
     return null;
   }
 
-  console.log('isActive', isMobileNav, isMinimized);
-
   return (
-    <nav className="grid h-[80vh] items-start gap-2 overflow-y-scroll">
+    <nav className="grid h-[80vh] items-start gap-9 overflow-y-scroll">
       <TooltipProvider>
         {items.map((item, index) => {
           const Icon = Icons[item.icon || 'arrowRight'];

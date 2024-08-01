@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { nanoid } from 'nanoid';
 import { BankListTable } from '@/components/data-table/data-table';
 import { AddBankDialog } from '@/components/data-table/AddEditModal';
@@ -15,47 +16,43 @@ export type BankDetails = {
   upiId: string;
   level: string;
 };
+
 const Page = () => {
-  const bd: BankDetails[] = [
-    {
-      id: nanoid(16),
-      accountHolderName: 'Vishnu',
-      accountNumber: '5620474005',
-      ifscCode: 'CBIN0280102',
-      bankName: 'CENTRAL BANK OF INDIA',
-      creditLimit: 100000,
-      debitLimit: 50000,
-      upiId: 'ashok@upi',
-      level: 'Level1'
-    },
-    {
-      id: nanoid(16),
-      accountHolderName: 'Trishul',
-      accountNumber: '120029499757',
-      ifscCode: 'CNRB0071150',
-      bankName: 'CANARA BANK',
-      creditLimit: 200000,
-      debitLimit: 100000,
-      upiId: 'meetagri@upi',
-      level: 'Level2'
+  const [bankList, setBankList] = useState<BankDetails[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchBankList = async () => {
+      try {
+        const response = await axios.get('http://localhost:8009');
+        setBankList(response.data);
+      } catch (err) {
+        setError('Failed to fetch bank details.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBankList();
+  }, []);
+
+  const handleAddBank = async (formData: BankDetails) => {
+    try {
+      const response = await axios.post('http://localhost:8009/', formData);
+      setBankList([...bankList, response.data]);
+    } catch (err) {
+      setError('Failed to add bank details.');
     }
-    // Add more data as needed
-  ];
-
-  const [bankList, setBankList] = useState<BankDetails[]>(bd);
-
-  const handleAddBank = (formData: BankDetails) => {
-    setBankList([...bankList, formData]);
   };
+
+  if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <>
       <div className="mr-6 mt-6 flex w-[70vdw] justify-end">
-        <AddBankDialog
-          //   fromData={formData}
-          //   setFormData={setFormData}
-          handleAddBank={handleAddBank}
-        />
+        <AddBankDialog handleAddBank={handleAddBank} />
       </div>
       <BankListTable data={bankList} />
     </>
