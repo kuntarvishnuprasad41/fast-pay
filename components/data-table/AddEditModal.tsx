@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +14,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { nanoid } from 'nanoid';
 
 export function AddBankDialog({ handleAddBank }: any) {
   const [formData, setFormData] = useState({
@@ -23,8 +24,11 @@ export function AddBankDialog({ handleAddBank }: any) {
     creditLimit: '',
     debitLimit: '',
     upiId: '',
-    level: ''
+    level: '',
+    amount: ''
   });
+
+  const [qrCodeFile, setQrCodeFile] = useState(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -36,31 +40,45 @@ export function AddBankDialog({ handleAddBank }: any) {
     }
   };
 
-  const handleSave = () => {
-    // Map form data to API data keys
-    const apiData = {
-      accountNumber: formData.accountNumber,
-      amount: parseFloat(formData.creditLimit), // Assuming amount corresponds to creditLimit
-      bankName: formData.bankName,
-      ifscCode: formData.ifscCode,
-      upiId: formData.upiId,
-      userName: formData.accountHolderName
-    };
+  const handleFileChange = (e) => {
+    setQrCodeFile(e.target.files[0]);
+  };
 
-    // Pass the mapped data to handleAddBank
-    handleAddBank(apiData);
+  const handleSave = async () => {
+    const formDataToSend = new FormData();
 
-    // Clear the form
-    setFormData({
-      accountHolderName: '',
-      accountNumber: '',
-      ifscCode: '',
-      bankName: '',
-      creditLimit: '',
-      debitLimit: '',
-      upiId: '',
-      level: ''
-    });
+    formDataToSend.append('userName', formData.accountHolderName);
+    formDataToSend.append('accountNumber', formData.accountNumber);
+    formDataToSend.append('ifscCode', formData.ifscCode);
+    formDataToSend.append('bankName', formData.bankName);
+    formDataToSend.append('creditLimit', formData.creditLimit);
+    formDataToSend.append('debitLimit', formData.debitLimit);
+    formDataToSend.append('upiId', formData.upiId);
+    formDataToSend.append('level', formData.level);
+    formDataToSend.append('amount', formData.amount);
+    if (qrCodeFile) {
+      formDataToSend.append('qrCode', qrCodeFile);
+    }
+
+    try {
+      await handleAddBank(formDataToSend);
+
+      // Clear the form
+      setFormData({
+        accountHolderName: '',
+        accountNumber: '',
+        ifscCode: '',
+        bankName: '',
+        creditLimit: '',
+        debitLimit: '',
+        upiId: '',
+        level: '',
+        amount: ''
+      });
+      setQrCodeFile(null);
+    } catch (error) {
+      console.error('Error saving bank details:', error);
+    }
   };
 
   return (
@@ -98,6 +116,17 @@ export function AddBankDialog({ handleAddBank }: any) {
               />
             </div>
           ))}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="qrCodeFile" className="text-right">
+              QR Code
+            </Label>
+            <Input
+              id="qrCodeFile"
+              type="file"
+              onChange={handleFileChange}
+              className="col-span-3"
+            />
+          </div>
         </div>
         <DialogFooter>
           <DialogClose asChild>
