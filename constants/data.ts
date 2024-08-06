@@ -162,6 +162,13 @@ export const navItems: NavItem[] = [
     disabled: false
   },
   {
+    title: 'Transactions',
+    href: '/dashboard/transactions',
+    icon: 'dashboard',
+    label: 'Transactions',
+    disabled: false
+  },
+  {
     title: 'Bank Login',
     href: '/dashboard/bank-login',
     icon: 'dashboard',
