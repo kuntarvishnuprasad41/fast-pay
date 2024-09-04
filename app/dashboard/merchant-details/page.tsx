@@ -34,6 +34,9 @@ export default function Page() {
         }
       );
       setMerchantDetails(response.data); // Update state with merchant details
+
+      console.log(response.data);
+      
     } catch (error) {
       console.error('Error fetching merchant details:', error);
     }

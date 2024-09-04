@@ -80,13 +80,12 @@ const Page = () => {
         }
       );
       // Update the payment list after successful status change
-      setPaymentList((prevList) =>
-        prevList.map((paymentProof) =>
-          paymentProof.payment.id === paymentId
-            ? { ...paymentProof, payment: { ...paymentProof.payment, status } }
-            : paymentProof
-        )
-      );
+      paymentList.map((p) => {
+        if (p.id === paymentId) {
+          p.status = status;
+        }
+        setPaymentList([...paymentList.filter((p) => p.id !== paymentId), p]);
+      });
     } catch (err) {
       console.error('Error updating payment status:', err);
     }
@@ -101,21 +100,21 @@ const Page = () => {
       case 'Pending':
         return 'bg-blue-800';
       default:
-        return '';
+        return 'bg-blue-800';
     }
   };
 
   const columns: ColumnDef<PaymentDetails>[] = [
     {
-      accessorKey: 'id',
-      header: 'Proof ID'
+      accessorKey: 'merchantId',
+      header: 'Merchant Id'
     },
     {
-      accessorKey: 'payment.id',
+      accessorKey: 'id',
       header: 'Payment ID'
     },
     {
-      accessorKey: 'payment.amount',
+      accessorKey: 'amount',
       header: 'Amount',
       size: 150
     },
@@ -124,14 +123,14 @@ const Page = () => {
       header: 'UTR Number'
     },
     {
-      accessorKey: 'payment.status',
+      accessorKey: 'status',
       header: 'Status'
     },
     {
-      accessorKey: 'screenshot',
+      accessorKey: 'screenShot',
       header: 'Screenshot',
       cell: ({ row }) => {
-        const screenshot = row.getValue('screenshot');
+        const screenshot = row.getValue('screenShot');
         return screenshot ? (
           <Dialog>
             <DialogTrigger asChild>
@@ -166,18 +165,14 @@ const Page = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
-                onClick={() =>
-                  handleStatusChange(paymentProof.payment.id, 'Verified')
-                }
-                disabled={paymentProof.payment.status === 'Verified'}
+                onClick={() => handleStatusChange(paymentProof.id, 'Verified')}
+                disabled={paymentProof.status === 'Verified'}
               >
                 Verify
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() =>
-                  handleStatusChange(paymentProof.payment.id, 'Error')
-                }
-                disabled={paymentProof.payment.status === 'Error'}
+                onClick={() => handleStatusChange(paymentProof.id, 'Error')}
+                disabled={paymentProof.status === 'Error'}
               >
                 Mark as Error
               </DropdownMenuItem>
@@ -229,7 +224,7 @@ const Page = () => {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className={getStatusColor(row.original.payment.status)} // Apply background color based on status
+                  className={getStatusColor(row.original.status)} // Apply background color based on status
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -80,9 +82,7 @@ export function AddMerchantDialog({ handleAddMerchant }: any) {
       });
 
       // Call the parent handler to refresh the merchant list
-      if (handleAddMerchant) {
-        handleAddMerchant(response.data);
-      }
+      window.history.pushState(':', '/dashboard/bank-transaction');
     } catch (error) {
       console.error('Error saving merchant details:', error);
     }

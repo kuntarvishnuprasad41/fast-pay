@@ -47,7 +47,7 @@ const Page = () => {
 
   const handleAddMerchant = async (formData: FormData) => {
     try {
-      const response = await axios.post(BASE_URL + '/merchants', formData, {
+      const response = await axios.post(BASE_URL + '/merchant', formData, {
         headers: {
           Authorization: `${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data'
