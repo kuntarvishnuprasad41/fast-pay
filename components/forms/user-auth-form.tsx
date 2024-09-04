@@ -10,39 +10,58 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import GoogleSignInButton from '../github-auth-button';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { BASE_URL } from '@/base_url';
 
+// Define schema for form validation
 const formSchema = z.object({
-  email: z.string().email({ message: 'Enter a valid email address' })
+  username: z.string().min(1, { message: 'Enter a valid username' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters' })
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl');
   const [loading, setLoading] = useState(false);
-  const defaultValues = {
-    email: 'demo@gmail.com'
-  };
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues
+    defaultValues: {
+      username: '',
+      password: ''
+    }
   });
 
+  // Handle form submission and call backend API for login
   const onSubmit = async (data: UserFormValue) => {
-    // signIn('credentials', {
-    //   email: data.email,
-    //   callbackUrl: callbackUrl ?? '/dashboard'
-    // });
-    router.push('/dashboard');
+    setLoading(true);
+    try {
+      const response = await axios.post(BASE_URL + '/login', {
+        username: data.username,
+        password: data.password
+      });
+
+      if (response.data.token) {
+        // Save JWT token in localStorage
+        localStorage.setItem('token', response.data.token);
+
+        // Redirect to dashboard
+        router.push('/dashboard');
+      } else {
+        alert('Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred while logging in.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,16 +71,37 @@ export default function UserAuthForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-2"
         >
+          {/* Username Field */}
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input
-                    type="email"
-                    placeholder="Enter your email..."
+                    type="text"
+                    placeholder="Enter your username..."
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Password Field */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password..."
                     disabled={loading}
                     {...field}
                   />
@@ -72,21 +112,10 @@ export default function UserAuthForm() {
           />
 
           <Button disabled={loading} className="ml-auto w-full" type="submit">
-            Continue With Email
+            Login
           </Button>
         </form>
       </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          {/* <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span> */}
-        </div>
-      </div>
-      {/* <GoogleSignInButton /> */}
     </>
   );
 }
