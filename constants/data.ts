@@ -134,6 +134,27 @@ export const navItems: NavItem[] = [
     disabled: false
   },
   {
+    title: 'Manual Bank',
+    href: '/dashboard/bank-transaction',
+    icon: 'dashboard',
+    label: 'Manual Bank',
+    disabled: false
+  },
+  {
+    title: 'Payout',
+    href: '/dashboard/payout',
+    icon: 'dashboard',
+    label: 'SS Transactions',
+    disabled: false
+  },
+  {
+    title: 'All  Payouts',
+    href: '/dashboard/payoutsAll',
+    icon: 'dashboard',
+    label: 'SS Transactions',
+    disabled: false
+  },
+  {
     title: 'SS Transactions',
     href: '/dashboard/ss-transactions',
     icon: 'dashboard',
@@ -154,13 +175,7 @@ export const navItems: NavItem[] = [
     label: 'Payout W Client',
     disabled: true
   },
-  {
-    title: 'Manual Bank',
-    href: '/dashboard/bank-transaction',
-    icon: 'dashboard',
-    label: 'Manual Bank',
-    disabled: false
-  },
+
   {
     title: 'Transactions',
     href: '/dashboard/transactions',

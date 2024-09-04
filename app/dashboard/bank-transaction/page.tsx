@@ -27,7 +27,7 @@ const Page = () => {
     const fetchMerchantList = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3001/merchants', // Replace with your merchant API URL
+          BASE_URL + '/merchants', // Replace with your merchant API URL
           {
             headers: {
               Authorization: `${localStorage.getItem('token')}` // Add your token if needed
