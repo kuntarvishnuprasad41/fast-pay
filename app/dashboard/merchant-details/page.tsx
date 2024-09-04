@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import axios from 'axios';
+import { BASE_URL } from '@/base_url';
 
 export default function Page() {
   const [selectedMerchant, setSelectedMerchant] = useState(null); // To hold selected merchant ID
@@ -25,7 +26,7 @@ export default function Page() {
   const fetchMerchantDetails = async (merchantId: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/merchant-details/${merchantId}`,
+        BASE_URL + `/merchant-details/${merchantId}`,
         {
           headers: {
             Authorization: `${localStorage.getItem('token')}` // Add your token here

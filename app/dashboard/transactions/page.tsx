@@ -1,51 +1,59 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BankListTable } from '@/components/data-table/data-table';
-import { AddBankDialog } from '@/components/data-table/AddEditModal';
-import Image from 'next/image';
-
-export type BankDetails = {
-  id: string;
-  accountHolderName: string;
-  accountNumber: string;
-  ifscCode: string;
-  bankName: string;
-  creditLimit: number;
-  debitLimit: number;
-  upiId: string;
-  level: string;
-};
+import { BASE_URL } from '@/base_url';
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable
+} from '@tanstack/react-table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
 
 export type PaymentDetails = {
-  id: string;
-  userName: string;
-  amount: string;
-  utrCode: string;
-  fileUrl: string;
+  id: number;
+  screenshot: string;
+  utrNumber: string;
+  payment: {
+    id: number;
+    amount: number;
+    status: string;
+    merchantId: number;
+    createdAt: string;
+  };
 };
 
 const Page = () => {
-  const [bankList, setBankList] = useState<BankDetails[]>([]);
   const [paymentList, setPaymentList] = useState<PaymentDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [selectedProof, setSelectedProof] = useState<string | null>(null); // For showing modal
 
   useEffect(() => {
-    const fetchBankList = async () => {
-      try {
-        const response = await axios.get('https://api.vishnuprasadkuntar.me/banks');
-        setBankList(response.data);
-      } catch (err) {
-        setError('Failed to fetch bank details.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const fetchPaymentList = async () => {
       try {
-        const response = await axios.get('https://api.vishnuprasadkuntar.me/payments');
+        const response = await axios.get(BASE_URL + '/payment-proofs', {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}` // Add JWT token if needed
+          }
+        });
         setPaymentList(response.data);
       } catch (err) {
         setError('Failed to fetch payment details.');
@@ -54,55 +62,196 @@ const Page = () => {
       }
     };
 
-    fetchBankList();
     fetchPaymentList();
   }, []);
 
-  const handleAddBank = async (formData: FormData) => {
+  const handleStatusChange = async (
+    paymentId: number,
+    status: 'Verified' | 'Error'
+  ) => {
     try {
-      const response = await axios.post(
-        'https://api.vishnuprasadkuntar.me/banks',
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
+      await axios.patch(
+        `${BASE_URL}/payment/verify`,
+        { paymentId, status },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}`
+          }
+        }
       );
-      setBankList([...bankList, response.data]);
+      // Update the payment list after successful status change
+      setPaymentList((prevList) =>
+        prevList.map((paymentProof) =>
+          paymentProof.payment.id === paymentId
+            ? { ...paymentProof, payment: { ...paymentProof.payment, status } }
+            : paymentProof
+        )
+      );
     } catch (err) {
-      setError('Failed to add bank details.');
+      console.error('Error updating payment status:', err);
     }
   };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Verified':
+        return 'bg-green-800';
+      case 'Error':
+        return 'bg-red-800';
+      case 'Pending':
+        return 'bg-blue-800';
+      default:
+        return '';
+    }
+  };
+
+  const columns: ColumnDef<PaymentDetails>[] = [
+    {
+      accessorKey: 'id',
+      header: 'Proof ID'
+    },
+    {
+      accessorKey: 'payment.id',
+      header: 'Payment ID'
+    },
+    {
+      accessorKey: 'payment.amount',
+      header: 'Amount',
+      size: 150
+    },
+    {
+      accessorKey: 'utrNumber',
+      header: 'UTR Number'
+    },
+    {
+      accessorKey: 'payment.status',
+      header: 'Status'
+    },
+    {
+      accessorKey: 'screenshot',
+      header: 'Screenshot',
+      cell: ({ row }) => {
+        const screenshot = row.getValue('screenshot');
+        return screenshot ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button onClick={() => setSelectedProof(screenshot)}>
+                View Proof
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <img src={screenshot} alt="Proof" className="max-w-full" />
+                <Button onClick={() => setSelectedProof(null)}>Close</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          'No Image'
+        );
+      }
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        const paymentProof = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                ...
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={() =>
+                  handleStatusChange(paymentProof.payment.id, 'Verified')
+                }
+                disabled={paymentProof.payment.status === 'Verified'}
+              >
+                Verify
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  handleStatusChange(paymentProof.payment.id, 'Error')
+                }
+                disabled={paymentProof.payment.status === 'Error'}
+              >
+                Mark as Error
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      }
+    }
+  ];
+
+  const table = useReactTable({
+    data: paymentList,
+    columns,
+    getCoreRowModel: getCoreRowModel()
+  });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <>
-      <div className="mr-6 mt-6 flex w-[70vdw] justify-end">
-        {/* <AddBankDialog handleAddBank={handleAddBank} /> */}
+    <div className="p-4">
+      <h2 className="text-2xl font-bold">Payment Proofs</h2>
+      <div className="mt-4">
+        <Input
+          placeholder="Search..."
+          value={globalFilter}
+          onChange={(event) => setGlobalFilter(event.target.value)}
+        />
       </div>
-      {/* <BankListTable data={bankList} /> */}
 
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold">Payment Proofs</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-          {paymentList.map(payment => (
-            <div key={payment.id} className="p-4 border rounded-lg shadow-md">
-              <p><strong>User Name:</strong> {payment.userName}</p>
-              <p><strong>Amount:</strong> {payment.amount}</p>
-              <p><strong>UTR Code:</strong> {payment.utrCode}</p>
-              {payment.fileUrl && (
-                <Image
-                  src={`https://api.vishnuprasadkuntar.me${payment.fileUrl}`}
-                  alt={`Proof by ${payment.userName}`}
-                  width={350}
-                  height={350}
-                  className="mt-2"
-                />
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="mt-6 w-full overflow-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className={getStatusColor(row.original.payment.status)} // Apply background color based on status
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
-    </>
+    </div>
   );
 };
 

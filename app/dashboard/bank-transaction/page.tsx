@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
-import { BankListTable } from '@/components/data-table/data-table';
-import { AddBankDialog } from '@/components/data-table/AddEditModal';
-
-export type BankDetails = {
+import { MerchantListTable } from '@/components/data-table/MerchantListTable';
+import { AddMerchantDialog } from '@/components/data-table/AddMerchantDialog';
+import { BASE_URL } from '@/base_url';
+export type MerchantDetails = {
   id: string;
+  name: string;
   accountHolderName: string;
   accountNumber: string;
   ifscCode: string;
@@ -18,49 +19,55 @@ export type BankDetails = {
 };
 
 const Page = () => {
-  const [bankList, setBankList] = useState<BankDetails[]>([]);
+  const [merchantList, setMerchantList] = useState<MerchantDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchBankList = async () => {
+    const fetchMerchantList = async () => {
       try {
         const response = await axios.get(
-          'https://api.vishnuprasadkuntar.me/banks'
+          'http://localhost:3001/merchants', // Replace with your merchant API URL
+          {
+            headers: {
+              Authorization: `${localStorage.getItem('token')}` // Add your token if needed
+            }
+          }
         );
-        setBankList(response.data);
+        setMerchantList(response.data);
       } catch (err) {
-        setError('Failed to fetch bank details.');
+        setError('Failed to fetch merchant details.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBankList();
+    fetchMerchantList();
   }, []);
 
-  const handleAddBank = async (formData: FormData) => {
+  const handleAddMerchant = async (formData: FormData) => {
     try {
-      const response = await axios.post(
-        'https://api.vishnuprasadkuntar.me/banks',
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      setBankList([...bankList, response.data]);
+      const response = await axios.post(BASE_URL + '/merchants', formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      setMerchantList([...merchantList, response.data]);
     } catch (err) {
-      setError('Failed to add bank details.');
+      setError('Failed to add merchant details.');
     }
   };
 
   if (loading) return <div>Loading...</div>;
-  // if (error) return <div>{error}</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <>
       <div className="mr-6 mt-6 flex w-[70vdw] justify-end">
-        <AddBankDialog handleAddBank={handleAddBank} />
+        <AddMerchantDialog handleAddMerchant={handleAddMerchant} />
       </div>
-      <BankListTable data={bankList} />
+      <MerchantListTable data={merchantList} />
     </>
   );
 };

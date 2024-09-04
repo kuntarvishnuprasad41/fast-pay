@@ -128,10 +128,10 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Transaction',
-    href: '/dashboard/transaction',
+    href: '/dashboard/transactions',
     icon: 'dashboard',
     label: 'Transaction',
-    disabled: true
+    disabled: false
   },
   {
     title: 'SS Transactions',
