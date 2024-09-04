@@ -25,7 +25,9 @@ const Page = () => {
   useEffect(() => {
     const fetchBankList = async () => {
       try {
-        const response = await axios.get('https://api.vishnuprasadkuntar.me/banks');
+        const response = await axios.get(
+          'https://api.vishnuprasadkuntar.me/banks'
+        );
         setBankList(response.data);
       } catch (err) {
         setError('Failed to fetch bank details.');
@@ -51,7 +53,7 @@ const Page = () => {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <>
